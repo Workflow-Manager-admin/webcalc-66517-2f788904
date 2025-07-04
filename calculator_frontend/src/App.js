@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import AdditionGame from "./AdditionGame";
+import DivisionGame from "./DivisionGame";
 
 /**
  * Color variables for the calculator app (matches provided theme).
@@ -236,6 +237,9 @@ function Calculator() {
 /**
  * Top-level App with toggle between Calculator and AdditionGame.
  */
+/**
+ * Top-level App with toggle between Calculator, AdditionGame and DivisionGame.
+ */
 // PUBLIC_INTERFACE
 function App() {
   useEffect(() => {
@@ -243,8 +247,10 @@ function App() {
     document.documentElement.setAttribute("data-theme", "light");
   }, []);
 
-  const [showGame, setShowGame] = useState(false);
+  // view: "calc", "add", "div"
+  const [view, setView] = useState("calc");
 
+  // Render top-level toggle
   return (
     <div
       className="App"
@@ -258,34 +264,63 @@ function App() {
           "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
       }}
     >
-      {!showGame ? (
+      {view === "calc" && (
         <div style={{ position: "relative", width: "100%" }}>
           <Calculator />
-          <button
-            className="calc-btn btn-op"
-            style={{
-              position: "absolute",
-              top: 16,
-              right: 16,
-              zIndex: 11,
-              minWidth: "80px",
-              fontSize: "1.04rem",
-              fontWeight: 500,
-              border: "1px solid var(--accent)",
-              background: "var(--accent)",
-              color: "#fff",
-              boxShadow: "0 1px 6px var(--card-shadow)",
-              padding: "7px 14px",
-              borderRadius: "8px"
-            }}
-            onClick={() => setShowGame(true)}
-            aria-label="Practice Addition Game"
-          >
-            + Game
-          </button>
+          <div style={{
+            position: "absolute",
+            top: 16,
+            right: 16,
+            zIndex: 11,
+            display: "flex",
+            gap: 8
+          }}>
+            <button
+              className="calc-btn btn-op"
+              style={{
+                minWidth: "80px",
+                fontSize: "1.04rem",
+                fontWeight: 500,
+                border: "1px solid var(--accent)",
+                background: "var(--accent)",
+                color: "#fff",
+                boxShadow: "0 1px 6px var(--card-shadow)",
+                padding: "7px 14px",
+                borderRadius: "8px",
+                cursor: "pointer"
+              }}
+              onClick={() => setView("add")}
+              aria-label="Practice Addition Game"
+            >
+              + Game
+            </button>
+            <button
+              className="calc-btn btn-op"
+              style={{
+                minWidth: "80px",
+                fontSize: "1.04rem",
+                fontWeight: 500,
+                border: "1px solid var(--primary)",
+                background: "var(--primary)",
+                color: "#fff",
+                boxShadow: "0 1px 6px var(--card-shadow)",
+                padding: "7px 14px",
+                borderRadius: "8px",
+                cursor: "pointer"
+              }}
+              onClick={() => setView("div")}
+              aria-label="Practice Division Game"
+            >
+              &divide; Game
+            </button>
+          </div>
         </div>
-      ) : (
-        <AdditionGame onClose={() => setShowGame(false)} />
+      )}
+      {view === "add" && (
+        <AdditionGame onClose={() => setView("calc")} />
+      )}
+      {view === "div" && (
+        <DivisionGame onClose={() => setView("calc")} />
       )}
     </div>
   );
