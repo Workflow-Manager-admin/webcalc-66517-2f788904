@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
+import AdditionGame from "./AdditionGame";
 
 /**
  * Color variables for the calculator app (matches provided theme).
@@ -232,12 +233,17 @@ function Calculator() {
  * App component and theme injection.
  * Wraps the Calculator in a full-viewport light background and centers it.
  */
+/**
+ * Top-level App with toggle between Calculator and AdditionGame.
+ */
 // PUBLIC_INTERFACE
 function App() {
   useEffect(() => {
     // Ensure theme is light as required
     document.documentElement.setAttribute("data-theme", "light");
   }, []);
+
+  const [showGame, setShowGame] = useState(false);
 
   return (
     <div
@@ -252,7 +258,35 @@ function App() {
           "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
       }}
     >
-      <Calculator />
+      {!showGame ? (
+        <div style={{ position: "relative", width: "100%" }}>
+          <Calculator />
+          <button
+            className="calc-btn btn-op"
+            style={{
+              position: "absolute",
+              top: 16,
+              right: 16,
+              zIndex: 11,
+              minWidth: "80px",
+              fontSize: "1.04rem",
+              fontWeight: 500,
+              border: "1px solid var(--accent)",
+              background: "var(--accent)",
+              color: "#fff",
+              boxShadow: "0 1px 6px var(--card-shadow)",
+              padding: "7px 14px",
+              borderRadius: "8px"
+            }}
+            onClick={() => setShowGame(true)}
+            aria-label="Practice Addition Game"
+          >
+            + Game
+          </button>
+        </div>
+      ) : (
+        <AdditionGame onClose={() => setShowGame(false)} />
+      )}
     </div>
   );
 }
